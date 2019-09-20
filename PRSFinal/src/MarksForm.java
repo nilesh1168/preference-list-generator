@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -17,13 +19,68 @@ import javax.swing.JOptionPane;
  */
 public class MarksForm extends javax.swing.JFrame {
     String HU,CAT,STREAM1,STREAM2,PCITY,PAREA;
+    public Connection conn;
+    public Statement stmt;
+    int insertsuccess;
     /**
      * Creates new form MarksForm
      */
-    public MarksForm() {
+    public MarksForm() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+            conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/prs", "root", "nilesh@8101998");
+            chkConn();
+            stmt = (Statement) conn.createStatement();
         initComponents();
     }
-
+    
+    public boolean chkConn(){
+        return DBConnect.chkconn(this.conn);
+    }
+    public boolean chk(int mat,int total,int rank,int cetmat,int cetphy,int cettotal){
+        if(mat>100 || mat<0)
+	{
+		setWarningMsg("Mathematics marks must be between 0 to 100");
+                return false;
+	}
+	
+	if(rank<1)
+	{
+		setWarningMsg("Rank cannot be 0 or negative");
+                return false;
+	}
+				
+				
+	if(cettotal>200 || cettotal<0)
+	{
+		setWarningMsg("CET total score must be between 0 to 200");
+                return false;
+	}
+				
+				
+	if(cetmat>100 || cetmat<0 || ((cetmat%2)==1))
+	{
+		setWarningMsg("CET Mathematics score must be an even integer ");
+                return false;
+	}
+				
+				
+	if(cetphy>50 || cetphy<0)
+	{
+            setWarningMsg("CET Physics score must be between 0 to 50");
+            return false;
+	}
+        return true;
+    }
+    
+    public boolean checkNull(){
+        if(mathsc.getText().equals("") || aggper.getText().equals("") || cetrank.getText().equals("") || matcet.getText().equals("") || phycet.getText().equals("") || totcet.getText().equals("") ||
+                 HomeU.getSelectedItem().equals("Select") || stream1.getSelectedItem().equals("Select") || prefcity.getSelectedItem().equals("Select") ||
+                category.getSelectedItem().equals("Select") || stream2.getSelectedItem().equals("Select") || prefarea.getSelectedItem().equals("Select"))
+            return true;
+        else
+            return false;
+    }
+    
     public void setWarningMsg(String txt)
     {
         JOptionPane.showMessageDialog(rootPane, txt,"Error",1);
@@ -41,33 +98,33 @@ public class MarksForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        mathsc = new javax.swing.JTextField();
+        aggper = new javax.swing.JTextField();
+        cetrank = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        matcet = new javax.swing.JTextField();
+        phycet = new javax.swing.JTextField();
+        totcet = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        HomeU = new javax.swing.JComboBox<>();
+        stream1 = new javax.swing.JComboBox<>();
+        prefcity = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        category = new javax.swing.JComboBox<>();
+        stream2 = new javax.swing.JComboBox<>();
+        prefarea = new javax.swing.JComboBox<>();
+        CloseBtn = new javax.swing.JButton();
+        GenerateListBtn = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        jButton3 = new javax.swing.JButton();
+        ResetBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MarksForm");
@@ -93,12 +150,12 @@ public class MarksForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(mathsc, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(aggper, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cetrank, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
@@ -107,15 +164,15 @@ public class MarksForm extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mathsc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(aggper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cetrank, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38))
         );
 
@@ -139,9 +196,9 @@ public class MarksForm extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-                    .addComponent(jTextField4)
-                    .addComponent(jTextField6))
+                    .addComponent(phycet, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                    .addComponent(matcet)
+                    .addComponent(totcet))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -150,15 +207,15 @@ public class MarksForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(matcet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phycet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(totcet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
 
@@ -168,14 +225,14 @@ public class MarksForm extends javax.swing.JFrame {
 
         jLabel9.setText("Preferred City");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Dr Babasaheb Ambedkar Marathwada University", "Swami Ramanand Teerth Marathwada University", "Dr Babasaheb Ambedkar Technology university", "Mumbai University", "North Maharashtra University", "Savitribai Phule Pune University", "Shivaji University", "Sant Gadgebaba Amravati University", "Gondwana University", "SNDT Womens University", "Solapur University", "Nagpur University" }));
+        HomeU.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Dr Babasaheb Ambedkar Marathwada University", "Swami Ramanand Teerth Marathwada University", "Dr Babasaheb Ambedkar Technology university", "Mumbai University", "North Maharashtra University", "Savitribai Phule Pune University", "Shivaji University", "Sant Gadgebaba Amravati University", "Gondwana University", "SNDT Womens University", "Solapur University", "Nagpur University" }));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mechanical", "Mechanical Sandwich", "Chemical", "Electrical", "Electronics", "Civil", "Production", "Production Sandwich", "Electronics and Telecommunications", "Computer", "Information Technology", "Automobile", "Biotechnology" }));
+        stream1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mechanical", "Mechanical Sandwich", "Chemical", "Electrical", "Electronics", "Civil", "Production", "Production Sandwich", "Electronics and Telecommunications", "Computer", "Information Technology", "Automobile", "Biotechnology" }));
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mumbai", "Nagpur", "Jalgaon", "Malegaon", "Akola", "Parbhani", "Nashik", "Aurangabad", "Pune", "Chandarpur", "Latur", "Nanded", "Kolhapur", "Solapur", "Gadchiroli", "Yavatmal", "Buldana", "Osmanabad", "Wardha", "Sangli", "Satara", "Washim", "Himgoli" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        prefcity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mumbai", "Nagpur", "Jalgaon", "Malegaon", "Akola", "Parbhani", "Nashik", "Aurangabad", "Pune", "Chandarpur", "Latur", "Nanded", "Kolhapur", "Solapur", "Gadchiroli", "Yavatmal", "Buldana", "Osmanabad", "Wardha", "Sangli", "Satara", "Washim", "Himgoli" }));
+        prefcity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                prefcityActionPerformed(evt);
             }
         });
 
@@ -185,35 +242,35 @@ public class MarksForm extends javax.swing.JFrame {
 
         jLabel12.setText("Preferred Area");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Open", "OBC", "SC", "ST", "NT-A", "NT-B", "NT-C", "NT-D", "TFWS" }));
+        category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Open", "OBC", "SC", "ST", "NT-A", "NT-B", "NT-C", "NT-D", "TFWS" }));
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mechanical", "Mechanical Sandwich", "Chemical", "Electrical", "Electronics", "Civil", "Production", "Production Sandwich", "Electronics and Telecommunications", "Computer", "Information Technology", "Automobile", "Biotechnology" }));
+        stream2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Mechanical", "Mechanical Sandwich", "Chemical", "Electrical", "Electronics", "Civil", "Production", "Production Sandwich", "Electronics and Telecommunications", "Computer", "Information Technology", "Automobile", "Biotechnology" }));
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Camp", "Hadapsar", "Shivaji Nagar", "Pimpri", "Chinchwad", "Nigdi", "Vishrantwadi", "Lohgaon", "Wadgaon", "Kondhwa" }));
-        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+        prefarea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Camp", "Hadapsar", "Shivaji Nagar", "Pimpri", "Chinchwad", "Nigdi", "Vishrantwadi", "Lohgaon", "Wadgaon", "Kondhwa" }));
+        prefarea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox6ActionPerformed(evt);
+                prefareaActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Close");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        CloseBtn.setText("Close");
+        CloseBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CloseBtnActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Generate Preference List");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        GenerateListBtn.setText("Generate Preference List");
+        GenerateListBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                GenerateListBtnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Reset");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        ResetBtn.setText("Reset");
+        ResetBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                ResetBtnActionPerformed(evt);
             }
         });
 
@@ -238,38 +295,38 @@ public class MarksForm extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel9)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(prefcity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel8)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(stream1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel7)
                                             .addGap(63, 63, 63)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(HomeU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGap(119, 119, 119)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel10)
                                             .addGap(90, 90, 90)
-                                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLabel11)
                                                 .addComponent(jLabel12))
                                             .addGap(50, 50, 50)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                                .addComponent(stream2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(prefarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(109, 109, 109)
-                        .addComponent(jButton1)
+                        .addComponent(CloseBtn)
                         .addGap(300, 300, 300)
-                        .addComponent(jButton2)
+                        .addComponent(GenerateListBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(ResetBtn)
                         .addGap(79, 79, 79)))
                 .addContainerGap())
         );
@@ -287,71 +344,71 @@ public class MarksForm extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(HomeU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stream1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stream2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(prefcity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(prefarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3))
+                    .addComponent(GenerateListBtn)
+                    .addComponent(CloseBtn)
+                    .addComponent(ResetBtn))
                 .addGap(12, 12, 12))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+    private void prefcityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefcityActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+    }//GEN-LAST:event_prefcityActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void CloseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseBtnActionPerformed
         // TODO add your handling code here:
         System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CloseBtnActionPerformed
 
-    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
+    private void prefareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prefareaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox6ActionPerformed
+    }//GEN-LAST:event_prefareaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void ResetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetBtnActionPerformed
         // TODO add your handling code here:
-        jTextField1.setText("");
-	jTextField2.setText("");
-	jTextField3.setText("");
-	jTextField4.setText("");
-	jTextField5.setText("");                        
-	jTextField6.setText("");
-	jComboBox1.setSelectedIndex(0);
-	jComboBox2.setSelectedIndex(0);
-	jComboBox3.setSelectedIndex(0);
-	jComboBox4.setSelectedIndex(0);
-	jComboBox5.setSelectedIndex(0);
-	jComboBox6.setSelectedIndex(0);
-    }//GEN-LAST:event_jButton3ActionPerformed
+        mathsc.setText("");
+	aggper.setText("");
+	cetrank.setText("");
+	matcet.setText("");
+	phycet.setText("");                        
+	totcet.setText("");
+	HomeU.setSelectedIndex(0);
+	stream1.setSelectedIndex(0);
+	prefcity.setSelectedIndex(0);
+	category.setSelectedIndex(0);
+	stream2.setSelectedIndex(0);
+	prefarea.setSelectedIndex(0);
+    }//GEN-LAST:event_ResetBtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void GenerateListBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateListBtnActionPerformed
         // TODO add your handling code here:
-        HU = (String) jComboBox1.getSelectedItem();
-	CAT = (String) jComboBox4.getSelectedItem();
-	STREAM1 = (String) jComboBox2.getSelectedItem();
-	STREAM2 = (String) jComboBox5.getSelectedItem();
-	PCITY = (String) jComboBox3.getSelectedItem();
-	PAREA = (String) jComboBox6.getSelectedItem();
+        HU = (String) HomeU.getSelectedItem();
+	CAT = (String) category.getSelectedItem();
+	STREAM1 = (String) stream1.getSelectedItem();
+	STREAM2 = (String) stream2.getSelectedItem();
+	PCITY = (String) prefcity.getSelectedItem();
+	PAREA = (String) prefarea.getSelectedItem();
         	
 	int mat=0;
 	int cetmat=0;
@@ -360,50 +417,20 @@ public class MarksForm extends javax.swing.JFrame {
 	int rank=1;
 	int cetphy=0;
 				
-	mat= Integer.parseInt(jTextField1.getText());
-	total= Integer.parseInt(jTextField2.getText());
-	rank= Integer.parseInt(jTextField3.getText());
-	cetmat= Integer.parseInt(jTextField4.getText());
-	cetphy= Integer.parseInt(jTextField5.getText());
-	cettotal= Integer.parseInt(jTextField6.getText());
+	mat= Integer.parseInt(mathsc.getText());
+	total= Integer.parseInt(aggper.getText());
+	rank= Integer.parseInt(cetrank.getText());
+	cetmat= Integer.parseInt(matcet.getText());
+	cetphy= Integer.parseInt(phycet.getText());
+	cettotal= Integer.parseInt(totcet.getText());
 	
-	if(mat>100 || mat<0)
-	{
-		setWarningMsg("Mathematics marks must be between 0 to 100");
-                return;
-	}
-	
-	if(rank<1)
-	{
-		setWarningMsg("Rank cannot be 0 or negative");
-                return;
-	}
-				
-				
-	if(cettotal>200 || cettotal<0)
-	{
-		setWarningMsg("CET total score must be between 0 to 200");
-                return;
-	}
-				
-				
-	if(cetmat>100 || cetmat<0 || ((cetmat%2)==1))
-	{
-		setWarningMsg("CET Mathematics score must be an even integer ");
-                return;
-	}
-				
-				
-	if(cetphy>50 || cetphy<0)
-	{
-            setWarningMsg("CET Physics score must be between 0 to 50");
+	if(!chk(mat,total,rank,cetmat,cetphy,cettotal))
             return;
-	}
 				
 				//codehere
 				
-	int upper_bound= Integer.parseInt(jTextField6.getText()) + 25;
-	int lower_bound= Integer.parseInt(jTextField6.getText()) - 15;
+	int upper_bound= Integer.parseInt(totcet.getText()) + 25;
+	int lower_bound= Integer.parseInt(totcet.getText()) - 15;
 	String s1=new String();
 	String s2=new String();
 				
@@ -532,17 +559,13 @@ public class MarksForm extends javax.swing.JFrame {
             s2 = "prod_sand";
         }
 
-        Connection conn = null;
-        Statement stmt = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/prs", "root", "nilesh@8101998");
-            stmt = (Statement) conn.createStatement();
+            
             String d1 = "use open;";
             String d2 = "use obc;";
             String d3 = "use sc;";
             String d4 = "use stnt;";
-            String d5 = "use prs;";
+//            String d5 = "use prs;";
             	 
             String strins = "insert into training_set values(" + mat + "," + total + "," + cetmat + "," + cetphy + "," + cettotal + "," + rank + ");";
             stmt.executeUpdate(strins);
@@ -613,10 +636,12 @@ public class MarksForm extends javax.swing.JFrame {
                 stmt.executeUpdate(q19);
                 System.out.println("BEFORE create prs.final");
                 String str = "create table prs.final as select * from " + CAT.toLowerCase() + ".final_list;";
-                stmt.executeUpdate(str);
+                insertsuccess =  stmt.executeUpdate(str);
                 
                 stmt.executeUpdate(q20);
+                System.out.println("after prs.final");
                 new ListForm().setVisible(true);
+                System.out.println("after listformset visible");
             }
 
             if (PCITY.equalsIgnoreCase("mumbai")) {
@@ -666,8 +691,9 @@ public class MarksForm extends javax.swing.JFrame {
                 stmt.executeUpdate(q16);
                 stmt.executeUpdate(q17);
                 stmt.executeUpdate(q18);
+                System.out.println("before final_list");
                 stmt.executeUpdate(q19);
-
+                System.out.println("after final_list");
                 String str = "create table prs.final as select * from " + CAT + ".final_list;";
                 stmt.executeUpdate(str);
                 stmt.executeUpdate(q20);
@@ -685,7 +711,9 @@ public class MarksForm extends javax.swing.JFrame {
                 if (conn != null) {
                     try {
                         stmt.close();
+                        System.out.println("stmt closed");
                         conn.close();
+                        System.out.println("Conn closed");
                     } catch (SQLException ignore) {
                     }
                 }
@@ -694,7 +722,7 @@ public class MarksForm extends javax.swing.JFrame {
             }
 
         }   
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_GenerateListBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -726,21 +754,25 @@ public class MarksForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MarksForm().setVisible(true);
+                try {
+                    new MarksForm().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MarksForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MarksForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
+    private javax.swing.JButton CloseBtn;
+    public javax.swing.JButton GenerateListBtn;
+    public javax.swing.JComboBox<String> HomeU;
+    private javax.swing.JButton ResetBtn;
+    public javax.swing.JTextField aggper;
+    public javax.swing.JComboBox<String> category;
+    public javax.swing.JTextField cetrank;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -757,11 +789,13 @@ public class MarksForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    public javax.swing.JTextField matcet;
+    public javax.swing.JTextField mathsc;
+    public javax.swing.JTextField phycet;
+    public javax.swing.JComboBox<String> prefarea;
+    public javax.swing.JComboBox<String> prefcity;
+    public javax.swing.JComboBox<String> stream1;
+    public javax.swing.JComboBox<String> stream2;
+    public javax.swing.JTextField totcet;
     // End of variables declaration//GEN-END:variables
 }

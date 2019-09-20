@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author nilesh
  */
 public class ListForm extends javax.swing.JFrame {
-
+    ResultSet rs;
     /**
      * Creates new form ListForm
      */
@@ -116,6 +116,7 @@ public class ListForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
             Statement stmt= null;
             Connection con = null;
+            System.out.println("IN listform");
         try {
             // TODO add your handling code here:
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -123,10 +124,9 @@ public class ListForm extends javax.swing.JFrame {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/prs", "root", "nilesh@8101998");
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from final");
+             rs = stmt.executeQuery("select * from final");
 
-            while (rs.next()) {
-                
+            while (rs.next()) {    
                 model.addRow(new Object[]{ rs.getInt("choise_code"), rs.getString("name"), rs.getInt("cutoff"), rs.getString("city"), rs.getString("location"), rs.getString("Branch"), rs.getInt("placement_factor") });
             }
 
@@ -186,10 +186,10 @@ public class ListForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    public javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
