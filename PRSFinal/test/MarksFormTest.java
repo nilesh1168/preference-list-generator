@@ -73,16 +73,20 @@ public class MarksFormTest {
     @Test
     public void emptyfieldsTest()
     {
+        //Check if Fields are null or not
         assertTrue(m.checkNull());
     }
     
     @Test
     public void manfieldsTest(){
+//        all mandatory field should be filled
         assertFalse(m.checkNull());
+        
     }
     
     @Test
     public void marksTest(){
+//        check if marks are in valid range
         assertTrue(m.chk(Integer.parseInt( m.mathsc.getText()),
                 Integer.parseInt(m.aggper.getText()),
                 Integer.parseInt(m.cetrank.getText()),
@@ -92,11 +96,13 @@ public class MarksFormTest {
     }
     @Test
     public void dbTest(){
+//        check if database is connected
         assertTrue(m.chkConn());
     }
     
     @Test
     public void dbInsertSuccess(){
+//        check if record is inserted successfully 
         assertNotEquals(0, m.insertsuccess);
     }
 }

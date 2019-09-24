@@ -23,7 +23,7 @@ public class DBConnect
         try 
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/prs","root","nilesh@8101998");  
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/prs?useSSL=false","root","nilesh@8101998");  
             return con;
         } catch (ClassNotFoundException|SQLException ex) 
         {

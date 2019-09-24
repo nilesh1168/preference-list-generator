@@ -53,12 +53,14 @@ public class CaptchaFormTest {
     @Test
     public void emptyfieldsTest()
     {
+        //Check if Fields are null or not
         assertFalse(cap.checkNull());
         System.out.println("1");
     }
     
     @Test
     public void nameTest(){
+        //Check if Name Field contains invalid input
         assertTrue(cap.checkNameFormat(cap.Fname.getText()));
         System.out.println("2");
     }
@@ -67,6 +69,7 @@ public class CaptchaFormTest {
     @Test
     public void emailidTest()
     {
+        //Check if Email Format is valid or not
         assertTrue(cap.checkEmailFormat(cap.Email.getText()));
         System.out.println("3");
     }
@@ -74,6 +77,7 @@ public class CaptchaFormTest {
     @Test
     public void captchaTest()
     {
+//        Check if captcha entered is correct or not
         assertEquals(cap.jLabel4.getText(), cap.Captcha.getText());
         System.out.println("4");
     }
@@ -81,6 +85,7 @@ public class CaptchaFormTest {
     @Test
     public void newcaptchaTest()
     {   
+//        check of reset captcha btn works
         String str = cap.jLabel4.getText();
         System.out.println(cap.jLabel4.getText());
         cap.newCapBtn.doClick();

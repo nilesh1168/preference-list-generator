@@ -48,6 +48,7 @@ public class ListFormTest {
     //
     @Test
     public void listcheck() {
+//        check of data is retrieved or not
         assertNotNull(l.rs);  
     }
 }
